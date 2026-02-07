@@ -1,6 +1,7 @@
 
 import java.util.Random;
 import java.util.Scanner;
+import java.lang.Math.*;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -8,10 +9,12 @@ import static java.lang.Math.min;
 
 public class Main {
     //Result
-    static char AI;
+    static char AI; //Computer's Move
     static int Xwin=0;
     static int Owin=0;
-    static boolean finished(char[][] arr,boolean silent){
+
+
+    static boolean finished(char[][] arr,boolean silent){ //check status(win/draw/incomplete)
         Xwin=0;
         Owin=0;
 
@@ -95,7 +98,7 @@ public class Main {
         }
 
 
-// Draw Logic
+// Check if any empty cells for 'Draw'
         boolean hasEmpty = false;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -118,12 +121,12 @@ public class Main {
 
             if(!silent) System.out.println("O wins");
         }
-        else if(!hasEmpty){
+        else if(!hasEmpty){ // DRAW
 
             if(!silent)  System.out.println("Draw");
         }
         else{
-            return false;
+            return false; //UNFINISHED GAME
         }
         return true;
     }
@@ -145,7 +148,7 @@ public class Main {
 
 
     static void userMove(char[][] arr,char ch,Scanner sc){
-        //Make a move
+        //Make a move (HUMAN) = coordinates {a,b}
         int a;
         int b;
 
@@ -155,16 +158,17 @@ public class Main {
             if (!sc.hasNextInt()) {
                 System.out.println("You should enter numbers!");
                 sc.nextLine();
-                continue;
+                continue; //Until valid 'a' keeps checking
             }
             a = sc.nextInt();
 
             if (!sc.hasNextInt()) {
                 System.out.println("You should enter numbers!");
                 sc.nextLine();
-                continue;
+                continue; //Until valid 'b' keeps checking
             }
             b = sc.nextInt();
+
 
             if (a < 1 || a > 3 || b < 1 || b > 3) {
                 System.out.println("Coordinates should be from 1 to 3!");
@@ -178,41 +182,51 @@ public class Main {
         }
 
 
-        //User Move
+        //Human Move - Mark valid move on the grid
         arr[a-1][b-1]=ch;
 
 
 
     }
 
-    static void compMove(char[][] arr,char ch){
+    static void easyMove(char[][] arr,char ch){
+
         System.out.println("Making move level \"easy\"");
-        //Computer Move
-        Random rnd = new Random();
+        //Computer Move - EASY
 
-        int x = rnd.nextInt(3);
-        int y = rnd.nextInt(3);
+        int x=0;
+        int y=0;
 
-        while (arr[x][y] != ' ') {
+        while (arr[x][y] != ' ') { //check if cell is occupied
+            //generate a random move
+            Random rnd = new Random();
             x = rnd.nextInt(3);
-            y = rnd.nextInt(3);
+            y = rnd.nextInt(3); //range from 0 to 2
         }
 
-        arr[x][y] = ch;
+        arr[x][y] = ch; //mark on grid
     }
 
     static void medium(char[][] arr,char move){
-        System.out.println("Making move level \"medium\"");
-        //HORIZONTAL
-        int blocki=-1;
-        int blockj=-1;
-        boolean winmove=false;
-        for(int i=0;i<3;i++){
-            int xcnt=0;
-            int ocnt=0;
-            int iemp=0;
-            int jemp=0;
+        /*Computer Move = char move - Medium: 1) Winning Move
+        *                         2) Blocking Move
+        *                         3) Fallback = Random */
 
+        System.out.println("Making move level \"medium\"");
+
+        //Check if there's a winning move, else find out blocking move simultaneously
+
+        int blocki=-1; //block coordinates
+        int blockj=-1;
+        boolean winmove=false; //if there isn't a winning move make blocking move
+
+        //HORIZONTAL check
+        for(int i=0;i<3;i++){
+            int xcnt=0; //count no. of X and Y
+            int ocnt=0;
+
+            int iemp=0; //keep track of empty cells to make winning/blocking move
+            int jemp=0;
 
             for(int j=0;j<3;j++){
                 if(arr[i][j]=='X'){
@@ -226,6 +240,7 @@ public class Main {
                     jemp=j;
                 }
             }
+            //Check winning and mark on grid + return immediately
             if(move=='X'&&xcnt==2&&ocnt==0){
                 arr[iemp][jemp]='X';
                 winmove=true;
@@ -236,23 +251,28 @@ public class Main {
                 winmove=true;
                 return;
             }
+
+            //Check blocking for each row, track coordinates and continue checking other ways
             if(move=='X'&&xcnt==0&&ocnt==2){
                 blocki=iemp;
                 blockj=jemp;
             }
-            if(move=='O'&&xcnt==2&&ocnt==0){
+            else if(move=='O'&&xcnt==2&&ocnt==0){
                 blocki=iemp;
                 blockj=jemp;
             }
 
         }
 
-        //VERTICAL
+        //VERTICAL check
+
         for(int i=0;i<3;i++){
             int xcnt=0;
             int ocnt=0;
+
             int iemp=0;
             int jemp=0;
+
             for(int j=0;j<3;j++){
                 if(arr[j][i]=='X'){
                     xcnt++;
@@ -265,16 +285,19 @@ public class Main {
                     jemp=i;
                 }
             }
+            //Winning move
             if(move=='X'&&xcnt==2&&ocnt==0){
                 arr[iemp][jemp]='X';
                 winmove=true;
                 return;
             }
-            if(move=='O'&&xcnt==0&&ocnt==2){
+            else if(move=='O'&&xcnt==0&&ocnt==2){
                 arr[iemp][jemp]='O';
                 winmove=true;
                 return;
             }
+
+            //Blocking move and continue to check others
             if(move=='X'&&xcnt==0&&ocnt==2){
                 blocki=iemp;
                 blockj=jemp;
@@ -286,13 +309,13 @@ public class Main {
         }
 
         //DIAGONAL L to R
+
         int xcnt=0;
         int ocnt=0;
+
         int iemp = 0;
         int jemp = 0;
         for(int i=0;i<3;i++) {
-
-
 
             if (arr[i][i] == 'X') {
                 xcnt++;
@@ -303,21 +326,25 @@ public class Main {
                 jemp = i;
             }
         }
+        //Winning move
+
         if(move=='X'&&xcnt==2&&ocnt==0){
             arr[iemp][jemp]='X';
             winmove=true;
             return;
         }
-        if(move=='O'&&xcnt==0&&ocnt==2){
+        else if(move=='O'&&xcnt==0&&ocnt==2){
             arr[iemp][jemp]='O';
             winmove=true;
             return;
         }
+
+        //Blocking move
         if(move=='X'&&xcnt==0&&ocnt==2){
             blocki=iemp;
             blockj=jemp;
         }
-        if(move=='O'&&xcnt==2&&ocnt==0){
+        else if(move=='O'&&xcnt==2&&ocnt==0){
             blocki=iemp;
             blockj=jemp;
         }
@@ -325,87 +352,98 @@ public class Main {
 //DIAGONAL R TO L
         xcnt=0;
         ocnt=0;
+
         iemp=0;
         jemp=0;
         for(int i=0;i<3;i++) {
 
-
-            if (arr[i][2 - i] == 'X') {
+            if (arr[i][2-i] == 'X') {
                 xcnt++;
-            } else if (arr[i][2 - i] == 'O') {
+            }
+            else if (arr[i][2-i] == 'O') {
                 ocnt++;
-            } else {
+            }
+            else {
                 iemp = i;
-                jemp = 2 - i;
+                jemp = 2-i;
             }
         }
+
+        //Winning move
         if(move=='X'&&xcnt==2&&ocnt==0){
             winmove=true;
             arr[iemp][jemp]='X';
             return;
         }
-        if(move=='O'&&xcnt==0&&ocnt==2){
+        else if(move=='O'&&xcnt==0&&ocnt==2){
             winmove=true;
             arr[iemp][jemp]='O';
             return;
         }
+        //Blocking move
         if(move=='X'&&xcnt==0&&ocnt==2){
             blocki=iemp;
             blockj=jemp;
         }
-        if(move=='O'&&xcnt==2&&ocnt==0){
+        else if(move=='O'&&xcnt==2&&ocnt==0){
             blocki=iemp;
             blockj=jemp;
         }
-//blocking move
-        if(winmove==false&&blocki!=-1){
 
+
+        //FINAL: MARKING THE BLOCKING move on grid
+        if(winmove==false&&blocki!=-1){
             arr[blocki][blockj]=move;
             return;
         }
-        //Fallback move
+
+        //FALLBACK move - if there's no blocking move: Make a random
         else if(blocki==-1){
-            compMove(arr,move);
+            easyMove(arr,move);
             return;
         }
-
-
-
 
     }
 
 
-    static void hard(char[][] arr,char move){
-        int bestScore = Integer.MIN_VALUE;
-        int bestMovei=0;
-        int bestMovej=0;
-        AI = move;
+    static void  hard(char[][] arr,char move){
         System.out.println("Making move level \"hard\"");
+
+        int bestScore = Integer.MIN_VALUE; //minimax algorithm
+
+        int bestMovei=0; //track coordinates which give the best score
+        int bestMovej=0;
+
+        AI = move; //the maximising move
+
         for(int i=0;i<3;i++){
             for(int j=0;j<3;j++){
+
                 int score=Integer.MIN_VALUE;
-                char nxtMove;
-                if(move=='X'){nxtMove='O';}
-                else{nxtMove='X';}
 
                 if(arr[i][j]==' '){
-                    arr[i][j]=move;
-                    //check endgame
 
-                    if (finished(arr, true)) {
+                    char nxtMove; //opponents move
+                    if(move=='X'){nxtMove='O';}
+                    else{nxtMove='X';}
+
+                    arr[i][j]=move; //make move and check score
+
+                    if (finished(arr, true)) {//if game ends
                         if ((Xwin == 1 && AI == 'X') || (Owin == 1 && AI == 'O'))
-                            score = 1;
+                            score = 1; //if maximizing player wins
                         else if (Xwin == 1 || Owin == 1)
-                            score = -1;
+                            score = -1; //if minimizing player wins
                         else
-                            score = 0;
-                    }else {
-                        score = minimax(arr, nxtMove, nxtMove == AI);
+                            score = 0; //if DRAW
+                    }
+                    else {//if game didnt end calculate further
+                        score = minimax(arr, nxtMove, nxtMove == AI); //opponents move
                     }
 
-                    arr[i][j]=' ';
+                    arr[i][j]=' ';//undo the move after checking
                 }
-                if(score>bestScore){
+                if(score>bestScore){ //record the move
                     bestScore=score;
                     bestMovej=j;
                     bestMovei=i;
@@ -418,20 +456,24 @@ public class Main {
     }
 
     static int minimax(char[][] arr,char move,boolean isMaximising){
+
         int bestscore=Integer.MIN_VALUE;
 
-        if(isMaximising){
+        if(isMaximising){//find max score if its maximising's turn
             bestscore=Integer.MIN_VALUE;
         }
-        else {
+        else {//find min score if it's minimising's turn
             bestscore=Integer.MAX_VALUE;
         }
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
+
                 if (arr[i][j] == ' ') {
                     arr[i][j] = move;
 
                     int score;
+
                     char nxtMove;
                     if(move=='X'){nxtMove='O';}
                     else nxtMove='X';
@@ -439,28 +481,29 @@ public class Main {
 
                     if (finished(arr, true)) {
                         if ((Xwin == 1 && AI == 'X') || (Owin == 1 && AI == 'O'))
-                            score = 1;
+                            score = 1; //maximising
                         else if (Xwin == 1 || Owin == 1)
-                            score = -1;
+                            score = -1; //minimising
                         else
-                            score = 0;
-                    }else {
-                        score = minimax(arr, nxtMove, !isMaximising);
+                            score = 0; //draw
+                    }
+                    else {
+                        score = minimax(arr, nxtMove, !isMaximising); //switch turns
                     }
 
                     arr[i][j] = ' ';
 
                     if (isMaximising)
-                        bestscore = Math.max(bestscore, score);
+                        //calculate max of all possibilities if maximising
+                        bestscore = max(bestscore, score);
                     else
-                        bestscore = Math.min(bestscore, score);
+                        //calculate min of all possibilities if minimising
+                        bestscore = min(bestscore, score);
                 }
             }
         }
         return bestscore;
     }
-
-
 
 
 
@@ -476,12 +519,13 @@ public class Main {
                 arr[i][j] = ' ';
             }
         }
+
         printGrid(arr);
         //User input
 
         while(true) {
 
-//Menu
+        //Menu
             System.out.println("Input command:");
             String line = sc.nextLine();
 
@@ -507,15 +551,15 @@ public class Main {
                 continue;
             }
 
-// input 4 cases
+// input cases
             if(menu[1].equals("easy") &&menu[2].equals("easy")){
                 while(true){
-                    compMove(arr,'X');
+                    easyMove(arr,'X');
                     printGrid(arr);
                     if(finished(arr,false)){
                         break;
                     }
-                    compMove(arr,'O');
+                    easyMove(arr,'O');
                     printGrid(arr);
                     if(finished(arr,false)){
                         break;
@@ -529,7 +573,7 @@ public class Main {
                     if(finished(arr,false)){
                         break;
                     }
-                    compMove(arr,'O');
+                    easyMove(arr,'O');
                     printGrid(arr);
                     if(finished(arr,false)){
                         break;
@@ -538,7 +582,7 @@ public class Main {
             }
             else if(menu[1].equals("easy") &&menu[2].equals("user")){
                 while(true){
-                    compMove(arr,'X');
+                    easyMove(arr,'X');
                     printGrid(arr);
                     if(finished(arr,false)){
                         break;
@@ -612,7 +656,7 @@ public class Main {
 
             else if(menu[1].equals("easy")&&menu[2].equals("medium")){
                 while (true) {
-                    compMove(arr,'X');
+                    easyMove(arr,'X');
                     printGrid(arr);
                     if (finished(arr,false)) {
                         break;
@@ -632,7 +676,7 @@ public class Main {
                     if (finished(arr,false)) {
                         break;
                     }
-                    compMove(arr,'O');
+                    easyMove(arr,'O');
                     printGrid(arr);
                     if(finished(arr,false)){
                         break;
@@ -687,7 +731,7 @@ public class Main {
 
             else if(menu[1].equals("easy")&&menu[2].equals("hard")){
                 while (true) {
-                    compMove(arr,'X');
+                    easyMove(arr,'X');
                     printGrid(arr);
                     if (finished(arr,false)) {
                         break;
@@ -707,7 +751,7 @@ public class Main {
                     if (finished(arr,false)) {
                         break;
                     }
-                    compMove(arr,'O');
+                    easyMove(arr,'O');
                     printGrid(arr);
                     if(finished(arr,false)){
                         break;
@@ -718,10 +762,7 @@ public class Main {
             else{
                 System.out.println("Invalid Input");
             }
-
-
-
-
+            
 
         }
 
