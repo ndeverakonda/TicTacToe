@@ -1,4 +1,3 @@
-
 import java.util.Random;
 import java.util.Scanner;
 import java.lang.Math.*;
@@ -6,79 +5,75 @@ import java.lang.Math.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-
 public class Main {
     //Result
     static char AI; //Computer's Move
-    static int Xwin=0;
-    static int Owin=0;
+    static int Xwin = 0;
+    static int Owin = 0;
 
 
-    static boolean finished(char[][] arr,boolean silent){ //check status(win/draw/incomplete)
-        Xwin=0;
-        Owin=0;
+    static boolean finished(char[][] arr, boolean silent) { //check status(win/draw/incomplete)
+        Xwin = 0;
+        Owin = 0;
 
 //Horizontal
-        for(int i=0;i<3;i++){
-            int markO=0;
-            int markX=0;
-            for(int j=0;j<3;j++){
-                if(arr[i][j]=='X'){
+        for (int i = 0; i < 3; i++) {
+            int markO = 0;
+            int markX = 0;
+            for (int j = 0; j < 3; j++) {
+                if (arr[i][j] == 'X') {
                     markX++;
-                }
-                else if(arr[i][j]=='O'){
+                } else if (arr[i][j] == 'O') {
                     markO++;
                 }
 
             }
-            if(markX==3){
-                Xwin=1;
+            if (markX == 3) {
+                Xwin = 1;
             }
-            if(markO==3){
-                Owin=1;
+            if (markO == 3) {
+                Owin = 1;
             }
         }
 
 //Vertical
-        for(int i=0;i<3;i++){
-            int markO=0;
-            int markX=0;
-            for(int j=0;j<3;j++){
-                if(arr[j][i]=='X'){
+        for (int i = 0; i < 3; i++) {
+            int markO = 0;
+            int markX = 0;
+            for (int j = 0; j < 3; j++) {
+                if (arr[j][i] == 'X') {
                     markX++;
-                }
-                else if(arr[j][i]=='O'){
+                } else if (arr[j][i] == 'O') {
                     markO++;
                 }
 
             }
-            if(markX==3){
-                Xwin=1;
+            if (markX == 3) {
+                Xwin = 1;
             }
-            if(markO==3){
-                Owin=1;
+            if (markO == 3) {
+                Owin = 1;
             }
         }
 
 
 //Diagonal L to R
-        int markO=0;
-        int markX=0;
-        for(int i=0;i<3;i++){
+        int markO = 0;
+        int markX = 0;
+        for (int i = 0; i < 3; i++) {
 
-            if(arr[i][i]=='X'){
+            if (arr[i][i] == 'X') {
                 markX++;
-            }
-            else if(arr[i][i]=='O'){
+            } else if (arr[i][i] == 'O') {
                 markO++;
             }
 
 
-            if(markX==3){
-                Xwin=1;
+            if (markX == 3) {
+                Xwin = 1;
             }
-            if(markO==3){
-                Owin=1;
+            if (markO == 3) {
+                Owin = 1;
             }
         }
 
@@ -104,6 +99,7 @@ public class Main {
             for (int j = 0; j < 3; j++) {
                 if (arr[i][j] == ' ') {
                     hasEmpty = true;
+                    break;
                 }
             }
         }
@@ -112,33 +108,29 @@ public class Main {
 //PRINT RESULT
 
 
-        if(Xwin==1&&Owin==0){
+        if (Xwin == 1 && Owin == 0) {
 
-            if(!silent) System.out.println("X wins");
+            if (!silent) System.out.println("X wins");
 
-        }
-        else if(Owin==1&&Xwin==0){
+        } else if (Owin == 1 && Xwin == 0) {
 
-            if(!silent) System.out.println("O wins");
-        }
-        else if(!hasEmpty){ // DRAW
+            if (!silent) System.out.println("O wins");
+        } else if (!hasEmpty) { // DRAW
 
-            if(!silent)  System.out.println("Draw");
-        }
-        else{
+            if (!silent) System.out.println("Draw");
+        } else {
             return false; //UNFINISHED GAME
         }
         return true;
     }
 
 
-
-    static void printGrid(char[][] arr){
+    static void printGrid(char[][] arr) {
         System.out.println("---------");
-        for(int i=0;i<3;i++){
+        for (int i = 0; i < 3; i++) {
             System.out.print("| ");
-            for(int j=0;j<3;j++){
-                System.out.print(arr[i][j]+" ");
+            for (int j = 0; j < 3; j++) {
+                System.out.print(arr[i][j] + " ");
             }
             System.out.println("|");
 
@@ -147,7 +139,7 @@ public class Main {
     }
 
 
-    static void userMove(char[][] arr,char ch,Scanner sc){
+    static void userMove(char[][] arr, char ch, Scanner sc) {
         //Make a move (HUMAN) = coordinates {a,b}
         int a;
         int b;
@@ -183,19 +175,18 @@ public class Main {
 
 
         //Human Move - Mark valid move on the grid
-        arr[a-1][b-1]=ch;
-
+        arr[a - 1][b - 1] = ch;
 
 
     }
 
-    static void easyMove(char[][] arr,char ch){
+    static void easyMove(char[][] arr, char ch) {
 
         System.out.println("Making move level \"easy\"");
         //Computer Move - EASY
 
-        int x=0;
-        int y=0;
+        int x = 0;
+        int y = 0;
 
         while (arr[x][y] != ' ') { //check if cell is occupied
             //generate a random move
@@ -207,115 +198,108 @@ public class Main {
         arr[x][y] = ch; //mark on grid
     }
 
-    static void medium(char[][] arr,char move){
+    static void medium(char[][] arr, char move) {
         /*Computer Move = char move - Medium: 1) Winning Move
-        *                         2) Blocking Move
-        *                         3) Fallback = Random */
+         *                         2) Blocking Move
+         *                         3) Fallback = Random */
 
         System.out.println("Making move level \"medium\"");
 
         //Check if there's a winning move, else find out blocking move simultaneously
 
-        int blocki=-1; //block coordinates
-        int blockj=-1;
-        boolean winmove=false; //if there isn't a winning move make blocking move
+        int blocki = -1; //block coordinates
+        int blockj = -1;
+        boolean winmove = false; //if there isn't a winning move make blocking move
 
         //HORIZONTAL check
-        for(int i=0;i<3;i++){
-            int xcnt=0; //count no. of X and Y
-            int ocnt=0;
+        for (int i = 0; i < 3; i++) {
+            int xcnt = 0; //count no. of X and Y
+            int ocnt = 0;
 
-            int iemp=0; //keep track of empty cells to make winning/blocking move
-            int jemp=0;
+            int iemp = 0; //keep track of empty cells to make winning/blocking move
+            int jemp = 0;
 
-            for(int j=0;j<3;j++){
-                if(arr[i][j]=='X'){
+            for (int j = 0; j < 3; j++) {
+                if (arr[i][j] == 'X') {
                     xcnt++;
-                }
-                else if(arr[i][j]=='O'){
+                } else if (arr[i][j] == 'O') {
                     ocnt++;
-                }
-                else{
-                    iemp=i;
-                    jemp=j;
+                } else {
+                    iemp = i;
+                    jemp = j;
                 }
             }
             //Check winning and mark on grid + return immediately
-            if(move=='X'&&xcnt==2&&ocnt==0){
-                arr[iemp][jemp]='X';
-                winmove=true;
+            if (move == 'X' && xcnt == 2 && ocnt == 0) {
+                arr[iemp][jemp] = 'X';
+                winmove = true;
                 return;
-            }
-            else if(move=='O'&&xcnt==0&&ocnt==2){
-                arr[iemp][jemp]='O';
-                winmove=true;
+            } else if (move == 'O' && xcnt == 0 && ocnt == 2) {
+                arr[iemp][jemp] = 'O';
+                winmove = true;
                 return;
             }
 
             //Check blocking for each row, track coordinates and continue checking other ways
-            if(move=='X'&&xcnt==0&&ocnt==2){
-                blocki=iemp;
-                blockj=jemp;
-            }
-            else if(move=='O'&&xcnt==2&&ocnt==0){
-                blocki=iemp;
-                blockj=jemp;
+            if (move == 'X' && xcnt == 0 && ocnt == 2) {
+                blocki = iemp;
+                blockj = jemp;
+            } else if (move == 'O' && xcnt == 2 && ocnt == 0) {
+                blocki = iemp;
+                blockj = jemp;
             }
 
         }
 
         //VERTICAL check
 
-        for(int i=0;i<3;i++){
-            int xcnt=0;
-            int ocnt=0;
+        for (int i = 0; i < 3; i++) {
+            int xcnt = 0;
+            int ocnt = 0;
 
-            int iemp=0;
-            int jemp=0;
+            int iemp = 0;
+            int jemp = 0;
 
-            for(int j=0;j<3;j++){
-                if(arr[j][i]=='X'){
+            for (int j = 0; j < 3; j++) {
+                if (arr[j][i] == 'X') {
                     xcnt++;
-                }
-                else if(arr[j][i]=='O'){
+                } else if (arr[j][i] == 'O') {
                     ocnt++;
-                }
-                else{
-                    iemp=j;
-                    jemp=i;
+                } else {
+                    iemp = j;
+                    jemp = i;
                 }
             }
             //Winning move
-            if(move=='X'&&xcnt==2&&ocnt==0){
-                arr[iemp][jemp]='X';
-                winmove=true;
+            if (move == 'X' && xcnt == 2 && ocnt == 0) {
+                arr[iemp][jemp] = 'X';
+                winmove = true;
                 return;
-            }
-            else if(move=='O'&&xcnt==0&&ocnt==2){
-                arr[iemp][jemp]='O';
-                winmove=true;
+            } else if (move == 'O' && xcnt == 0 && ocnt == 2) {
+                arr[iemp][jemp] = 'O';
+                winmove = true;
                 return;
             }
 
             //Blocking move and continue to check others
-            if(move=='X'&&xcnt==0&&ocnt==2){
-                blocki=iemp;
-                blockj=jemp;
+            if (move == 'X' && xcnt == 0 && ocnt == 2) {
+                blocki = iemp;
+                blockj = jemp;
             }
-            if(move=='O'&&xcnt==2&&ocnt==0){
-                blocki=iemp;
-                blockj=jemp;
+            if (move == 'O' && xcnt == 2 && ocnt == 0) {
+                blocki = iemp;
+                blockj = jemp;
             }
         }
 
         //DIAGONAL L to R
 
-        int xcnt=0;
-        int ocnt=0;
+        int xcnt = 0;
+        int ocnt = 0;
 
         int iemp = 0;
         int jemp = 0;
-        for(int i=0;i<3;i++) {
+        for (int i = 0; i < 3; i++) {
 
             if (arr[i][i] == 'X') {
                 xcnt++;
@@ -328,142 +312,132 @@ public class Main {
         }
         //Winning move
 
-        if(move=='X'&&xcnt==2&&ocnt==0){
-            arr[iemp][jemp]='X';
-            winmove=true;
+        if (move == 'X' && xcnt == 2 && ocnt == 0) {
+            arr[iemp][jemp] = 'X';
+            winmove = true;
             return;
-        }
-        else if(move=='O'&&xcnt==0&&ocnt==2){
-            arr[iemp][jemp]='O';
-            winmove=true;
+        } else if (move == 'O' && xcnt == 0 && ocnt == 2) {
+            arr[iemp][jemp] = 'O';
+            winmove = true;
             return;
         }
 
         //Blocking move
-        if(move=='X'&&xcnt==0&&ocnt==2){
-            blocki=iemp;
-            blockj=jemp;
-        }
-        else if(move=='O'&&xcnt==2&&ocnt==0){
-            blocki=iemp;
-            blockj=jemp;
+        if (move == 'X' && xcnt == 0 && ocnt == 2) {
+            blocki = iemp;
+            blockj = jemp;
+        } else if (move == 'O' && xcnt == 2 && ocnt == 0) {
+            blocki = iemp;
+            blockj = jemp;
         }
 
 //DIAGONAL R TO L
-        xcnt=0;
-        ocnt=0;
+        xcnt = 0;
+        ocnt = 0;
 
-        iemp=0;
-        jemp=0;
-        for(int i=0;i<3;i++) {
+        iemp = 0;
+        jemp = 0;
+        for (int i = 0; i < 3; i++) {
 
-            if (arr[i][2-i] == 'X') {
+            if (arr[i][2 - i] == 'X') {
                 xcnt++;
-            }
-            else if (arr[i][2-i] == 'O') {
+            } else if (arr[i][2 - i] == 'O') {
                 ocnt++;
-            }
-            else {
+            } else {
                 iemp = i;
-                jemp = 2-i;
+                jemp = 2 - i;
             }
         }
 
         //Winning move
-        if(move=='X'&&xcnt==2&&ocnt==0){
-            winmove=true;
-            arr[iemp][jemp]='X';
+        if (move == 'X' && xcnt == 2 && ocnt == 0) {
+            winmove = true;
+            arr[iemp][jemp] = 'X';
             return;
-        }
-        else if(move=='O'&&xcnt==0&&ocnt==2){
-            winmove=true;
-            arr[iemp][jemp]='O';
+        } else if (move == 'O' && xcnt == 0 && ocnt == 2) {
+            winmove = true;
+            arr[iemp][jemp] = 'O';
             return;
         }
         //Blocking move
-        if(move=='X'&&xcnt==0&&ocnt==2){
-            blocki=iemp;
-            blockj=jemp;
-        }
-        else if(move=='O'&&xcnt==2&&ocnt==0){
-            blocki=iemp;
-            blockj=jemp;
+        if (move == 'X' && xcnt == 0 && ocnt == 2) {
+            blocki = iemp;
+            blockj = jemp;
+        } else if (move == 'O' && xcnt == 2 && ocnt == 0) {
+            blocki = iemp;
+            blockj = jemp;
         }
 
 
         //FINAL: MARKING THE BLOCKING move on grid
-        if(winmove==false&&blocki!=-1){
-            arr[blocki][blockj]=move;
-            return;
+        if (!winmove && blocki != -1) {
+            arr[blocki][blockj] = move;
         }
 
         //FALLBACK move - if there's no blocking move: Make a random
-        else if(blocki==-1){
-            easyMove(arr,move);
-            return;
+        else if (blocki == -1) {
+            easyMove(arr, move);
         }
 
     }
 
 
-    static void  hard(char[][] arr,char move){
+    static void hard(char[][] arr, char move) {
         System.out.println("Making move level \"hard\"");
 
         int bestScore = Integer.MIN_VALUE; //minimax algorithm
 
-        int bestMovei=0; //track coordinates which give the best score
-        int bestMovej=0;
+        int bestMovei = 0; //track coordinates which give the best score
+        int bestMovej = 0;
 
         AI = move; //the maximising move
 
-        for(int i=0;i<3;i++){
-            for(int j=0;j<3;j++){
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
 
-                int score=Integer.MIN_VALUE;
+                int score = Integer.MIN_VALUE;
 
-                if(arr[i][j]==' '){
+                if (arr[i][j] == ' ') {
 
                     char nxtMove; //opponents move
-                    if(move=='X'){nxtMove='O';}
-                    else{nxtMove='X';}
+                    if (move == 'X') {
+                        nxtMove = 'O';
+                    } else {
+                        nxtMove = 'X';
+                    }
 
-                    arr[i][j]=move; //make move and check score
+                    arr[i][j] = move; //make move and check score
 
                     if (finished(arr, true)) {//if game ends
-                        if ((Xwin == 1 && AI == 'X') || (Owin == 1 && AI == 'O'))
-                            score = 1; //if maximizing player wins
-                        else if (Xwin == 1 || Owin == 1)
-                            score = -1; //if minimizing player wins
-                        else
-                            score = 0; //if DRAW
-                    }
-                    else {//if game didnt end calculate further
+                        if ((Xwin == 1 && AI == 'X') || (Owin == 1 && AI == 'O')) score = 1; //if maximizing player wins
+                        else if (Xwin == 1 || Owin == 1) score = -1; //if minimizing player wins
+                        else score = 0; //if DRAW
+                    } else {//if game didnt end calculate further
                         score = minimax(arr, nxtMove, nxtMove == AI); //opponents move
                     }
 
-                    arr[i][j]=' ';//undo the move after checking
+                    arr[i][j] = ' ';//undo the move after checking
                 }
-                if(score>bestScore){ //record the move
-                    bestScore=score;
-                    bestMovej=j;
-                    bestMovei=i;
+                if (score > bestScore) { //record the move
+                    bestScore = score;
+                    bestMovej = j;
+                    bestMovei = i;
                 }
 
             }
         }
-        arr[bestMovei][bestMovej]=move;
+        arr[bestMovei][bestMovej] = move;
 
     }
 
-    static int minimax(char[][] arr,char move,boolean isMaximising){
+    static int minimax(char[][] arr, char move, boolean isMaximising) {
 
-        int bestscore=Integer.MIN_VALUE;
+        int bestscore = Integer.MIN_VALUE;
 
-        if(isMaximising){//find max score if its maximising's turn
-            bestscore=Integer.MIN_VALUE;
-        }
-        else {//find min score if it's minimising's turn
-            bestscore=Integer.MAX_VALUE;
+        if (isMaximising) {//find max score if its maximising's turn
+            bestscore = Integer.MIN_VALUE;
+        } else {//find min score if it's minimising's turn
+            bestscore = Integer.MAX_VALUE;
         }
 
         for (int i = 0; i < 3; i++) {
@@ -475,19 +449,16 @@ public class Main {
                     int score;
 
                     char nxtMove;
-                    if(move=='X'){nxtMove='O';}
-                    else nxtMove='X';
+                    if (move == 'X') {
+                        nxtMove = 'O';
+                    } else nxtMove = 'X';
 
 
                     if (finished(arr, true)) {
-                        if ((Xwin == 1 && AI == 'X') || (Owin == 1 && AI == 'O'))
-                            score = 1; //maximising
-                        else if (Xwin == 1 || Owin == 1)
-                            score = -1; //minimising
-                        else
-                            score = 0; //draw
-                    }
-                    else {
+                        if ((Xwin == 1 && AI == 'X') || (Owin == 1 && AI == 'O')) score = 1; //maximising
+                        else if (Xwin == 1 || Owin == 1) score = -1; //minimising
+                        else score = 0; //draw
+                    } else {
                         score = minimax(arr, nxtMove, !isMaximising); //switch turns
                     }
 
@@ -506,13 +477,12 @@ public class Main {
     }
 
 
-
     public static void main(String[] args) {
 
 
-        Scanner sc=new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
 
-        char[][] arr=new char[3][3];
+        char[][] arr = new char[3][3];
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -523,9 +493,9 @@ public class Main {
         printGrid(arr);
         //User input
 
-        while(true) {
+        while (true) {
 
-        //Menu
+            //Menu
             System.out.println("Input command:");
             String line = sc.nextLine();
 
@@ -552,217 +522,192 @@ public class Main {
             }
 
 // input cases
-            if(menu[1].equals("easy") &&menu[2].equals("easy")){
-                while(true){
-                    easyMove(arr,'X');
-                    printGrid(arr);
-                    if(finished(arr,false)){
-                        break;
-                    }
-                    easyMove(arr,'O');
-                    printGrid(arr);
-                    if(finished(arr,false)){
-                        break;
-                    }
-                }
-            }
-            else if(menu[1].equals("user") &&menu[2].equals("easy")){
-                while(true){
-                    userMove(arr,'X',sc);
-                    printGrid(arr);
-                    if(finished(arr,false)){
-                        break;
-                    }
-                    easyMove(arr,'O');
-                    printGrid(arr);
-                    if(finished(arr,false)){
-                        break;
-                    }
-                }
-            }
-            else if(menu[1].equals("easy") &&menu[2].equals("user")){
-                while(true){
-                    easyMove(arr,'X');
-                    printGrid(arr);
-                    if(finished(arr,false)){
-                        break;
-                    }
-                    userMove(arr,'O',sc);
-                    printGrid(arr);
-                    if(finished(arr,false)){
-                        break;
-                    }
-                }
-            }
-            else if(menu[1].equals("user") &&menu[2].equals("user")){
-                while(true){
-                    userMove(arr,'X',sc);
-                    printGrid(arr);
-                    if(finished(arr,false)){
-                        break;
-                    }
-                    userMove(arr,'O',sc);
-                    printGrid(arr);
-                    if(finished(arr,false)){
-                        break;
-                    }
-                }
-            }
-
-            else if(menu[1].equals("medium")&&menu[2].equals("medium")) {
+            if (menu[1].equals("easy") && menu[2].equals("easy")) {
                 while (true) {
-                    medium(arr, 'X');
+                    easyMove(arr, 'X');
                     printGrid(arr);
-                    if (finished(arr,false)) {
+                    if (finished(arr, false)) {
                         break;
                     }
-                    medium(arr, 'O');
+                    easyMove(arr, 'O');
                     printGrid(arr);
-                    if (finished(arr,false)) {
-                        break;
-                    }
-                }
-            }
-
-            else if(menu[1].equals("medium")&&menu[2].equals("user")){
-                while (true) {
-                    medium(arr, 'X');
-                    printGrid(arr);
-                    if (finished(arr,false)) {
-                        break;
-                    }
-                    userMove(arr,'O',sc);
-                    printGrid(arr);
-                    if(finished(arr,false)){
+                    if (finished(arr, false)) {
                         break;
                     }
                 }
-            }
-
-            else if(menu[1].equals("user")&&menu[2].equals("medium")){
+            } else if (menu[1].equals("user") && menu[2].equals("easy")) {
                 while (true) {
                     userMove(arr, 'X', sc);
                     printGrid(arr);
-                    if (finished(arr,false)) {
+                    if (finished(arr, false)) {
                         break;
                     }
-                    medium(arr, 'O');
+                    easyMove(arr, 'O');
                     printGrid(arr);
-                    if(finished(arr,false)){
+                    if (finished(arr, false)) {
                         break;
                     }
                 }
-            }
-
-            else if(menu[1].equals("easy")&&menu[2].equals("medium")){
+            } else if (menu[1].equals("easy") && menu[2].equals("user")) {
                 while (true) {
-                    easyMove(arr,'X');
+                    easyMove(arr, 'X');
                     printGrid(arr);
-                    if (finished(arr,false)) {
+                    if (finished(arr, false)) {
                         break;
                     }
-                    medium(arr, 'O');
+                    userMove(arr, 'O', sc);
                     printGrid(arr);
-                    if(finished(arr,false)){
-                        break;
-                    }
-                }
-            }
-
-            else if(menu[1].equals("medium")&&menu[2].equals("easy")){
-                while (true) {
-                    medium(arr, 'X');
-                    printGrid(arr);
-                    if (finished(arr,false)) {
-                        break;
-                    }
-                    easyMove(arr,'O');
-                    printGrid(arr);
-                    if(finished(arr,false)){
+                    if (finished(arr, false)) {
                         break;
                     }
                 }
-            }
-
-            else if(menu[1].equals("hard")&&menu[2].equals("hard")) {
-                while (true) {
-                    hard(arr, 'X');
-                    printGrid(arr);
-                    if (finished(arr,false)) {
-                        break;
-                    }
-                    medium(arr, 'O');
-                    printGrid(arr);
-                    if (finished(arr,false)) {
-                        break;
-                    }
-                }
-            }
-
-            else if(menu[1].equals("hard")&&menu[2].equals("user")){
-                while (true) {
-                    hard(arr, 'X');
-                    printGrid(arr);
-                    if (finished(arr,false)) {
-                        break;
-                    }
-                    userMove(arr,'O',sc);
-                    printGrid(arr);
-                    if(finished(arr,false)){
-                        break;
-                    }
-                }
-            }
-
-            else if(menu[1].equals("user")&&menu[2].equals("hard")){
+            } else if (menu[1].equals("user") && menu[2].equals("user")) {
                 while (true) {
                     userMove(arr, 'X', sc);
                     printGrid(arr);
-                    if (finished(arr,false)) {
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                    userMove(arr, 'O', sc);
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                }
+            } else if (menu[1].equals("medium") && menu[2].equals("medium")) {
+                while (true) {
+                    medium(arr, 'X');
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                    medium(arr, 'O');
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                }
+            } else if (menu[1].equals("medium") && menu[2].equals("user")) {
+                while (true) {
+                    medium(arr, 'X');
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                    userMove(arr, 'O', sc);
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                }
+            } else if (menu[1].equals("user") && menu[2].equals("medium")) {
+                while (true) {
+                    userMove(arr, 'X', sc);
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                    medium(arr, 'O');
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                }
+            } else if (menu[1].equals("easy") && menu[2].equals("medium")) {
+                while (true) {
+                    easyMove(arr, 'X');
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                    medium(arr, 'O');
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                }
+            } else if (menu[1].equals("medium") && menu[2].equals("easy")) {
+                while (true) {
+                    medium(arr, 'X');
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                    easyMove(arr, 'O');
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                }
+            } else if (menu[1].equals("hard") && menu[2].equals("hard")) {
+                while (true) {
+                    hard(arr, 'X');
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                    medium(arr, 'O');
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                }
+            } else if (menu[1].equals("hard") && menu[2].equals("user")) {
+                while (true) {
+                    hard(arr, 'X');
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                    userMove(arr, 'O', sc);
+                    printGrid(arr);
+                    if (finished(arr, false)) {
+                        break;
+                    }
+                }
+            } else if (menu[1].equals("user") && menu[2].equals("hard")) {
+                while (true) {
+                    userMove(arr, 'X', sc);
+                    printGrid(arr);
+                    if (finished(arr, false)) {
                         break;
                     }
                     hard(arr, 'O');
                     printGrid(arr);
-                    if(finished(arr,false)){
+                    if (finished(arr, false)) {
                         break;
                     }
                 }
-            }
-
-            else if(menu[1].equals("easy")&&menu[2].equals("hard")){
+            } else if (menu[1].equals("easy") && menu[2].equals("hard")) {
                 while (true) {
-                    easyMove(arr,'X');
+                    easyMove(arr, 'X');
                     printGrid(arr);
-                    if (finished(arr,false)) {
+                    if (finished(arr, false)) {
                         break;
                     }
                     hard(arr, 'O');
                     printGrid(arr);
-                    if(finished(arr,false)){
+                    if (finished(arr, false)) {
                         break;
                     }
                 }
-            }
-
-            else if(menu[1].equals("hard")&&menu[2].equals("easy")){
+            } else if (menu[1].equals("hard") && menu[2].equals("easy")) {
                 while (true) {
                     hard(arr, 'X');
                     printGrid(arr);
-                    if (finished(arr,false)) {
+                    if (finished(arr, false)) {
                         break;
                     }
-                    easyMove(arr,'O');
+                    easyMove(arr, 'O');
                     printGrid(arr);
-                    if(finished(arr,false)){
+                    if (finished(arr, false)) {
                         break;
                     }
                 }
-            }
-
-            else{
+            } else {
                 System.out.println("Invalid Input");
             }
-            
+
 
         }
 
